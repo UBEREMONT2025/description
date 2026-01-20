@@ -13,6 +13,7 @@ kotorye soglasujutsja s biznesom i komandami.
 
 ## 2. Prioritizacija biznes-scenariev (MVP i sledujuschie volny)
 - Spisok kljuchevyh scenariev (lead -> dogovor, dizajn -> remont, oplata -> akt).
+- Vkljuchit tender na podbor dizajnera i tender na podbor upravljajuschego.
 - Granicy MVP, chto ne vkljuchaetsja.
 - Minimalno nuzhnye dannye i statusy.
 
