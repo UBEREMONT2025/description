@@ -1,103 +1,179 @@
-# Plan razrabotki arhitektury Uberemont
+# План разработки архитектуры Уберемонт
 
-Nizhe plan rabot po razrabotke arhitektury na osnove tekuschego HLA.
-Podhod iterativnyj: kazhdyj etap zakanchivaetsja ponyatnymi artefaktami,
-kotorye soglasujutsja s biznesom i komandami.
+Ниже пошаговый план разработки архитектуры на основе текущего HLA.
+Подход итеративный: каждый шаг завершаетcя понятными артефактами,
+которые согласуются с бизнесом и командами.
 
-## 1. Utochnenie ramok i celyej
-- Celi platformy, metriky uspeha, ograniychenija.
-- Stejholders and roli, zony otvetstvennosti.
-- Regulatornye i juridicheskie trebovanija.
+## 1. Уточнение рамок и целей
+**Что делаем:**
+- фиксируем цель платформы и метрики успеха;
+- определяем стейкхолдеров и зоны ответственности;
+- уточняем регуляторные и юридические требования.
 
-**Vykhod:** soglasovannye ramki, predposylki, KPI.
+**Результат:** согласованные рамки, предпосылки, КПИ.
 
-## 2. Prioritizacija biznes-scenariev (MVP i sledujuschie volny)
-- Spisok kljuchevyh scenariev (lead -> dogovor, dizajn -> remont, oplata -> akt).
-- Granicy MVP, chto ne vkljuchaetsja.
-- Minimalno nuzhnye dannye i statusy.
+**Вопросы:**
+1) Какая целевая география (город/регион/страна)?
+2) Нужны ли юридически значимые ЭП уже в МВП?
 
-**Vykhod:** matrica prioritetov scenariev i MVP scope.
+## 2. Приоритизация ключевых сценариев (МВП и следующие волны)
+**Что делаем:**
+- фиксируем 5–7 ключевых сценариев МВП;
+- определяем, что точно не входит в МВП;
+- задаем минимально нужные статусы и данные.
 
-## 3. Domenna model i slovar terminov
-- Osnovnye sushchnosti, svjazi, statusy, zhiznennyj cikl.
-- Edinye identifikatory, vladelcy dannyh (SoT).
+**Предлагаемые сценарии МВП (включая тендеры):**
+1) Лид -> сделка -> заявка.
+2) Онбординг заказчика и доступ в личный кабинет.
+3) Дизайн‑проект: тендер на дизайнера -> договор -> старт.
+4) Дизайн‑проект: этапы -> согласование -> акты.
+5) Ремонт: тендер на управляющего -> договор -> базовый бюджет.
+6) Ремонт: этап -> акт -> приемка/замечания.
+7) Оплата по этапам -> синхронизация с 1С.
 
-**Vykhod:** domenna model, slovar terminov, ownership dannyh.
+**Результат:** матрица приоритетов сценариев и границы МВП.
 
-## 4. Context arhitektura (C4 L1)
-- Granicy sistemy, vneshnie aktory, smeshnye sistemy.
-- Kto i kak vzaimodejstvuet s platformoj.
+**Вопросы:**
+1) Подтверждаем полный дизайн‑проект в МВП или только тендер+договор?
+2) Нужны ли в МВП закупки/логистика, или оставить на следующий этап?
 
-**Vykhod:** C4 Context diagram.
+## 3. Доменная модель и словарь терминов
+**Что делаем:**
+- описываем сущности, связи, статусы и жизненные циклы;
+- фиксируем единые идентификаторы и владельцев данных (источник правды).
 
-## 5. Container arhitektura (C4 L2)
-- WEB, BFF, Bitrix24, 1C, Integration layer, AI.
-- Otvetstvennost kazhdogo kontejnera i interfejsy.
+**Результат:** доменная модель, словарь терминов, владельцы данных.
 
-**Vykhod:** C4 Container diagram, spisok interfejsov.
+**Вопросы:**
+1) Какие сущности считаем обязательными: проект, этап, акт, платеж, договор?
+2) Где «источник правды» по проекту и этапам: Битрикс или веб‑контур?
 
-## 6. Process orchestration
-- BPMN ili state-machine dlya kljuchevyh processov.
-- Pravila perehoda, otkati, eskalacii.
+## 4. Контекстная архитектура (диаграмма С4, уровень 1)
+**Что делаем:**
+- обозначаем границы системы и внешних участников;
+- фиксируем внешние системы и каналы.
 
-**Vykhod:** BPMN/State diagrams po 5-7 glavnym processam.
+**Результат:** контекстная диаграмма С4.
 
-## 7. Integracionnaja arhitektura
-- API kontrakty, webhook-sobytiya, idempotentnost.
-- Pravila sinhronizacii, retry, obrabotka oshibok.
-- Data mapping mezhdu WEB, Bitrix24 i 1C.
+**Вопросы:**
+1) Есть ли внешние системы кроме Битрикс и 1С (телефония, банки, СДЭК)?
 
-**Vykhod:** specification integracij (API, events, data mapping).
+## 5. Контейнерная архитектура (диаграмма С4, уровень 2)
+**Что делаем:**
+- описываем контейнеры: веб, БФФ, Битрикс24, 1С, интеграционный слой, ИИ;
+- фиксируем ответственность и интерфейсы между контейнерами.
 
-## 8. Data arhitektura
-- Schemy dannyh po konturam, storage, audit.
-- Politiki hranenija, backup i restore.
+**Результат:** контейнерная диаграмма С4 и список интерфейсов.
 
-**Vykhod:** ER-model, data dictionary, policy hranenija.
+**Вопросы:**
+1) Будет ли отдельный сервис очередей/интеграций или все в БФФ?
 
-## 9. Security i access model
-- RBAC, segmentacija po proektam, audit log.
-- Autentifikacija i avtorisacija.
+## 6. Оркестрация процессов (BPMN / статусные машины)
+**Что делаем:**
+- описываем маршруты и переходы для ключевых процессов;
+- фиксируем правила откатов, блокировок и эскалаций.
 
-**Vykhod:** model dostupa, spisok riskov i kontrol.
+**Результат:** BPMN или статусные схемы по 5–7 процессам.
 
-## 10. Nefunkcionalnye trebovanija i observability
-- Performance, SLA, skaliruemost, monitoring.
-- Logirovanie, metriky, alerting.
+**Вопросы:**
+1) Кто окончательно подтверждает этапы: заказчик или ПМ?
+2) Как фиксируются «замечания» — как отдельный процесс или статус?
 
-**Vykhod:** NFR matrix, observability plan.
+## 7. Интеграционная архитектура (АПИ/вебхуки, синхронизация)
+**Что делаем:**
+- описываем контракты АПИ, события и вебхуки;
+- задаем правила синхронизации, повторов и обработки ошибок;
+- фиксируем маппинг данных между веб, Битрикс и 1С.
 
-## 11. Deployment i DevOps
-- Okruzhenija (dev/stage/prod), CI/CD, release policy.
-- Infrastruktura, sekrety, backup.
+**Результат:** спецификация интеграций (АПИ, события, маппинг).
 
-**Vykhod:** deployment diagram, release process.
+**Вопросы:**
+1) Какие операции должны быть строго синхронными (например, оплата)?
+2) Сколько допустимо задержки между системами?
 
-## 12. Roadmap realizacii i riski
-- Etapy realizacii (MVP, expansion, scaling).
-- Zavisimocti, riski, plan mitigacii.
+## 8. Архитектура данных
+**Что делаем:**
+- описываем схемы данных по контурам;
+- определяем хранение файлов и историю изменений;
+- задаем политику бэкапов.
 
-**Vykhod:** roadmap, risk register.
+**Результат:** ER‑модель, словарь данных, политика хранения.
 
-## 13. Review i validacija
-- Architecture review s biznesom i tech.
-- PoC dlja kriticheskih integracij.
+**Вопросы:**
+1) Где будем хранить файлы (локально, S3‑совместимое, другое)?
+2) Нужен ли отдельный архив для закрытых проектов?
 
-**Vykhod:** soglasovannaja arhitektura, plan validacii.
+## 9. Безопасность и РБАК (ролевая модель)
+**Что делаем:**
+- описываем роли и права доступа;
+- фиксируем аудит критичных действий;
+- задаем методы аутентификации.
+
+**Результат:** модель доступа и список контролей.
+
+**Вопросы:**
+1) Какой способ входа: телефон+СМС, почта, комбинированный?
+2) Требуется ли КЭП/УЭП для актов в МВП?
+
+## 10. Нефункциональные требования и наблюдаемость
+**Что делаем:**
+- фиксируем требования по скорости и нагрузке;
+- описываем мониторинг, метрики, алерты.
+
+**Результат:** матрица НФТ и план наблюдаемости.
+
+**Вопросы:**
+1) Какой целевой SLA на МВП?
+2) Какая пиковая нагрузка по заявкам в день?
+
+## 11. Развертывание и ДевОпс
+**Что делаем:**
+- описываем окружения (dev/stage/prod);
+- фиксируем процесс релизов и откатов;
+- задаем правила хранения секретов и бэкапов.
+
+**Результат:** схема развертывания и процесс релизов.
+
+**Вопросы:**
+1) Где будем размещать (облако/он‑прем)?
+2) Какой цикл релизов допустим (раз в 2 недели, раз в месяц)?
+
+## 12. Дорожная карта и риски
+**Что делаем:**
+- описываем этапы (МВП, расширение, масштабирование);
+- фиксируем зависимости и риски;
+- планируем меры снижения рисков.
+
+**Результат:** дорожная карта и реестр рисков.
+
+**Вопросы:**
+1) Какие крайние сроки по запуску МВП?
+2) Какие риски считаются критичными (интеграции, юрчасть, кадры)?
+
+## 13. Ревью и валидация
+**Что делаем:**
+- проводим архитектурное ревью с бизнесом и техкомандой;
+- делаем мини‑PoC для критичных интеграций.
+
+**Результат:** согласованная архитектура и план валидации.
+
+**Вопросы:**
+1) Кто финально утверждает архитектуру (роль/имя)?
+2) Какие интеграции нужно проверить в первую очередь?
 
 ---
 
-## Minimalnyj nabor artefaktov
-- HLA (aktualizirovannaja versija)
-- C4 diagrams (Context, Container, Component)
-- BPMN/State diagrams po kljuchevym scenarijam
-- Data dictionary i ER model
-- API i integration spec
-- Security model i RBAC
-- NFR matrix i observability plan
-- Roadmap s etapami i zavisimostjami
+## Минимальный набор артефактов
+- HLA (актуализированная версия)
+- диаграммы С4: контекст, контейнеры, компоненты
+- BPMN/статусные диаграммы по ключевым сценариям
+- словарь данных и ER‑модель
+- спецификация АПИ и интеграций
+- модель безопасности и РБАК
+- матрица НФТ и план наблюдаемости
+- дорожная карта с этапами и зависимостями
 
-## Blizhajshie sledujuschie shagi (predlozhenie)
-1. Zafiksirovat 5-7 kljuchevyh scenariev dlya MVP.
-2. Sdelat domennu model i slovar terminov.
-3. Narisovat C4 Context i Container.
+## Ближайшие следующие шаги
+1) Утвердить список сценариев МВП (включая оба тендера).
+2) Сделать доменную модель и словарь терминов.
+3) Подготовить контекстную и контейнерную диаграммы.
